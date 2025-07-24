@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edumentors - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #6366f1;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active {
+            color: #6366f1;
+            border-bottom-color: #6366f1;
+        }
+
+        .nav-item:hover {
+            color: #6366f1;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #64748b;
+            cursor: pointer;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #6366f1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-email {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .calendar-section {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-right: 2rem;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .month-year {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .nav-btn:hover {
+            background-color: #f3f4f6;
+        }
+
+        .today-btn {
+            background: #f3f4f6;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .today-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .day-header {
+            background: #f9fafb;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .day-cell {
+            background: white;
+            min-height: 100px;
+            padding: 0.75rem;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .day-cell:hover {
+            background: #f8fafc;
+        }
+
+        .day-number {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .day-cell.other-month .day-number {
+            color: #d1d5db;
+        }
+
+        .day-cell.today {
+            background: #eff6ff;
+        }
+
+        .day-cell.today .day-number {
+            background: #3b82f6;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .sidebar {
+            width: 350px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+        }
+
+        .action-centre,
+        .upcoming-sessions {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+        }
+
+        .no-action,
+        .no-sessions {
+            text-align: center;
+            color: #6b7280;
+            padding: 2rem 0;
+        }
+
+        .no-action-icon,
+        .no-sessions-icon {
+            font-size: 3rem;
+            color: #d1d5db;
+            margin-bottom: 1rem;
+        }
+
+        .no-action-text,
+        .no-sessions-text {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-action-subtext,
+        .no-sessions-subtext {
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        .see-all-link {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            float: right;
+        }
+
+        .see-all-link:hover {
+            text-decoration: underline;
+        }
+
+        .browse-tutors {
+            background: none;
+            border: 2px solid #6366f1;
+            color: #6366f1;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 1rem;
+        }
+
+        .browse-tutors:hover {
+            background: #6366f1;
+            color: white;
+        }
+
+        .promo-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .promo-card {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .promo-card.amazon {
+            background: linear-gradient(135deg, #4c1d95, #6366f1);
+        }
+
+        .promo-card.gcse {
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+        }
+
+        .promo-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .promo-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .promo-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .promo-link {
+            color: #fbbf24;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+
+        .promo-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+
+            .calendar-section {
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">Edumentors</div>
+        <nav class="nav">
+            <a href="#" class="nav-item active">Dashboard</a>
+            <a href="#" class="nav-item">Find a tutor</a>
+            <a href="#" class="nav-item">My Bookings</a>
+            <a href="#" class="nav-item">Messages</a>
+        </nav>
+        <div class="user-section">
+            <button class="notification-btn">🔔</button>
+            <div class="user-info">
+                <div class="user-avatar">N</div>
+                <div class="user-details">
+                    <div class="user-name">Welcome, Nguyễn</div>
+                    <div class="user-email">lenguyentime15@gmail.com</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="calendar-section">
+            <div class="calendar-header">
+                <h1 class="calendar-title">My Schedule</h1>
+                <div class="calendar-nav">
+                    <button class="nav-btn">‹</button>
+                    <span class="month-year">July 2025</span>
+                    <button class="nav-btn">›</button>
+                    <button class="today-btn">Today</button>
+                </div>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="day-header">MON</div>
+                <div class="day-header">TUE</div>
+                <div class="day-header">WED</div>
+                <div class="day-header">THU</div>
+                <div class="day-header">FRI</div>
+                <div class="day-header">SAT</div>
+                <div class="day-header">SUN</div>
+
+                <div class="day-cell other-month">
+                    <div class="day-number">30</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">1</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">2</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">3</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">4</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">5</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">6</div>
+                </div>
+
+                <div class="day-cell">
+                    <div class="day-number">7</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">8</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">9</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">10</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">11</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">12</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">13</div>
+                </div>
+
+                <div class="day-cell">
+                    <div class="day-number">14</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">15</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">16</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">17</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">18</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">19</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">20</div>
+                </div>
+
+                <div class="day-cell">
+                    <div class="day-number">21</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">22</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">23</div>
+                </div>
+                <div class="day-cell today">
+                    <div class="day-number">24</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">25</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">26</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">27</div>
+                </div>
+
+                <div class="day-cell">
+                    <div class="day-number">28</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">29</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">30</div>
+                </div>
+                <div class="day-cell">
+                    <div class="day-number">31</div>
+                </div>
+                <div class="day-cell other-month">
+                    <div class="day-number">1</div>
+                </div>
+                <div class="day-cell other-month">
+                    <div class="day-number">2</div>
+                </div>
+                <div class="day-cell other-month">
+                    <div class="day-number">3</div>
+                </div>
+            </div>
+        </section>
+
+        <aside class="sidebar">
+            <div class="action-centre">
+                <h2 class="section-title">Action centre</h2>
+                <div class="no-action">
+                    <div class="no-action-icon">📋</div>
+                    <div class="no-action-text">No action required</div>
+                    <div class="no-action-subtext">You're all set for now</div>
+                </div>
+            </div>
+
+            <div class="upcoming-sessions">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 class="section-title" style="margin-bottom: 0;">Upcoming sessions</h2>
+                    <a href="#" class="see-all-link">See all</a>
+                </div>
+                <div class="no-sessions">
+                    <div class="no-sessions-icon">📅</div>
+                    <div class="no-sessions-text">No sessions booked</div>
+                    <div class="no-sessions-subtext">Your booked sessions will appear here</div>
+                    <button class="browse-tutors">Browse Tutors</button>
+                </div>
+            </div>
+
+            <div class="promo-cards">
+                <div class="promo-card amazon">
+                    <div class="promo-content">
+                        <div class="promo-title">Get a £50 Amazon Gift Card</div>
+                        <div class="promo-subtitle">when you <a href="#" class="promo-link">Refer a friend</a></div>
+                    </div>
+                    <div class="promo-icon">🎁</div>
+                </div>
+
+                <div class="promo-card gcse">
+                    <div class="promo-content">
+                        <div class="promo-title">Get feedback on your GCSE ESSAYS</div>
+                        <div class="promo-subtitle">MarkMyGCSE</div>
+                    </div>
+                    <div class="promo-icon">📝</div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        // Add some basic interactivity
+        document.addEventListener('DOMContentLoaded', function () {
+            // Highlight today's date
+            const today = new Date();
+            const todayDate = today.getDate();
+
+            // Calendar navigation
+            const prevBtn = document.querySelector('.nav-btn:first-of-type');
+            const nextBtn = document.querySelector('.nav-btn:last-of-type');
+            const monthYear = document.querySelector('.month-year');
+            const todayBtn = document.querySelector('.today-btn');
+
+            let currentMonth = 6; // July (0-indexed)
+            let currentYear = 2025;
+
+            const months = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+
+            // Check if elements exist before adding event listeners
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function () {
+                    currentMonth--;
+                    if (currentMonth < 0) {
+                        currentMonth = 11;
+                        currentYear--;
+                    }
+                    if (monthYear) {
+                        monthYear.textContent = `${months[currentMonth]} ${currentYear}`;
+                    }
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function () {
+                    currentMonth++;
+                    if (currentMonth > 11) {
+                        currentMonth = 0;
+                        currentYear++;
+                    }
+                    if (monthYear) {
+                        monthYear.textContent = `${months[currentMonth]} ${currentYear}`;
+                    }
+                });
+            }
+
+            // Today button
+            if (todayBtn) {
+                todayBtn.addEventListener('click', function () {
+                    currentMonth = today.getMonth();
+                    currentYear = today.getFullYear();
+                    if (monthYear) {
+                        monthYear.textContent = `${months[currentMonth]} ${currentYear}`;
+                    }
+                });
+            }
+
+            // Day cell hover effects
+            document.querySelectorAll('.day-cell').forEach(cell => {
+                cell.addEventListener('click', function () {
+                    console.log('Selected date:', this.querySelector('.day-number').textContent);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .settings-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+            width: 100%;
+            max-width: 380px;
+            transition: all 0.3s ease;
+        }
+
+        .settings-container:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 12px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            color: #4a5568;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            z-index: -1;
+        }
+
+        .menu-item:hover {
+            background-color: #f7fafc;
+            color: #2d3748;
+            transform: translateX(4px);
+        }
+
+        .menu-item:hover::before {
+            width: 4px;
+        }
+
+        .menu-item .icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e2e8f0;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .menu-item:hover .icon {
+            background: #cbd5e0;
+            transform: scale(1.1);
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+            margin: 24px 0;
+        }
+
+        .section-title {
+            color: #718096;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 24px 12px 12px 12px;
+        }
+
+        .help-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 12px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            color: #4a5568;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .help-item:hover {
+            background-color: #f0fff4;
+            color: #2d3748;
+            transform: translateX(4px);
+        }
+
+        .help-item .icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e6fffa;
+            border-radius: 8px;
+            color: #38a169;
+            transition: all 0.2s ease;
+        }
+
+        .help-item:hover .icon {
+            background: #c6f6d5;
+            transform: scale(1.1);
+        }
+
+        .logout-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 32px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logout-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .logout-btn:hover::before {
+            left: 100%;
+        }
+
+        .logout-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Icons using CSS */
+        .user-icon::before {
+            content: '👤';
+            font-size: 16px;
+        }
+
+        .settings-icon::before {
+            content: '⚙️';
+            font-size: 16px;
+        }
+
+        .help-icon::before {
+            content: '❓';
+            font-size: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .settings-container {
+                padding: 24px;
+                margin: 16px;
+            }
+        }
+
+        /* Hover animations */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .menu-item:active,
+        .help-item:active {
+            animation: pulse 0.2s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="settings-container">
+        <!-- Main Menu Items -->
+        <div class="menu-item" onclick="navigateTo('personal-info')">
+            <div class="icon user-icon"></div>
+            <span>Personal Info</span>
+        </div>
+
+        <div class="menu-item" onclick="navigateTo('account-settings')">
+            <div class="icon settings-icon"></div>
+            <span>Account settings</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Support Section -->
+        <div class="menu-item" onclick="navigateTo('faqs')">
+            <span>FAQs</span>
+        </div>
+
+        <div class="menu-item" onclick="navigateTo('terms')">
+            <span>Terms and Conditions</span>
+        </div>
+
+        <div class="menu-item" onclick="navigateTo('privacy')">
+            <span>Privacy Policy</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Help Section -->
+        <div class="help-item" onclick="navigateTo('help')">
+            <div class="icon help-icon"></div>
+            <span>Need help?</span>
+        </div>
+
+        <!-- Logout Button -->
+        <button class="logout-btn" onclick="logout()">
+            Log Out
+        </button>
+    </div>
+
+    <script>
+        function navigateTo(section) {
+            console.log('Navigating to:', section);
+            // Add navigation logic here
+            showNotification(`Opening ${section.replace('-', ' ')}...`);
+        }
+
+        function logout() {
+            console.log('Logging out...');
+            showNotification('Logging out...');
+            // Add logout logic here
+            setTimeout(() => {
+                alert('Logged out successfully!');
+            }, 1000);
+        }
+
+        function showNotification(message) {
+            // Create a simple notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #4a5568;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                font-size: 14px;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+
+            // Add animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+                style.remove();
+            }, 2000);
+        }
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                console.log('Settings menu closed');
+            }
+        });
+    </script>
+</body>
+
+</html>
