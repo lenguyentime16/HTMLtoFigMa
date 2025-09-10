@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Dropdown Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #F7F7F7;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Header giả lập */
+        .header {
+            background: #FFFFFF;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1F1F1F;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-item {
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-item.active {
+            color: #FDCB6E;
+            border-bottom-color: #FDCB6E;
+        }
+
+        /* Account Button */
+        .account-section {
+            position: relative;
+            display: inline-block;
+        }
+
+        .account-trigger {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #FFFFFF;
+            border: 2px solid #FFE9B3;
+            padding: 8px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #1F1F1F;
+            font-weight: 500;
+        }
+
+        .account-trigger:hover {
+            background: #E6B15C;
+            color: #FFFFFF;
+            border-color: #E6B15C;
+        }
+
+        .account-avatar {
+            width: 32px;
+            height: 32px;
+            background: #FDCB6E;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .account-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .account-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .account-email {
+            font-size: 12px;
+            color: #666;
+            opacity: 0.8;
+        }
+
+        .dropdown-arrow {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+            color: #FFA552;
+        }
+
+        .account-trigger.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: #FFFFFF;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            border: 1px solid #FFE9B3;
+            min-width: 280px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-content {
+            padding: 20px;
+        }
+
+        .menu-section {
+            margin-bottom: 20px;
+        }
+
+        .menu-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: #1F1F1F;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 4px;
+        }
+
+        .menu-item:hover {
+            background: #FFE9B3;
+            color: #1F1F1F;
+        }
+
+        .menu-item-icon {
+            width: 20px;
+            height: 20px;
+            color: #FFA552;
+        }
+
+        .menu-separator {
+            height: 1px;
+            background: #FFE9B3;
+            margin: 16px 0;
+        }
+
+        .logout-btn {
+            width: 100%;
+            background: #FDCB6E;
+            color: #FFFFFF;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #E6B15C;
+            transform: translateY(-1px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .dropdown-menu {
+                right: -20px;
+                left: -20px;
+                min-width: auto;
+            }
+
+            .account-info {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header giả lập -->
+        <div class="header">
+            <div class="logo">Edumentors</div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">Dashboard</a>
+                <a href="#" class="nav-item">Find a tutor</a>
+                <a href="#" class="nav-item">My Bookings</a>
+                <a href="#" class="nav-item">Messages</a>
+            </nav>
+
+            <div class="account-section">
+                <div class="account-trigger" onclick="toggleDropdown()">
+                    <div class="account-avatar">N</div>
+                    <div class="account-info">
+                        <span class="account-name">Welcome, Nguyễn</span>
+                        <span class="account-email">lenguyentimei6@gmail.com</span>
+                    </div>
+                    <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6,9 12,15 18,9"></polyline>
+                    </svg>
+                </div>
+
+                <div class="dropdown-menu" id="accountDropdown">
+                    <div class="dropdown-content">
+                        <div class="menu-section">
+                            <a href="#" class="menu-item">
+                                <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                Personal Info
+                            </a>
+
+                            <a href="#" class="menu-item">
+                                <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"></path>
+                                </svg>
+                                Account settings
+                            </a>
+                        </div>
+
+                        <div class="menu-separator"></div>
+
+                        <div class="menu-section">
+                            <a href="#" class="menu-item">
+                                <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                    <path d="M12 17h.01"></path>
+                                </svg>
+                                FAQs
+                            </a>
+
+                            <a href="#" class="menu-item">
+                                <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14,2 14,8 20,8"></polyline>
+                                </svg>
+                                Terms and Conditions
+                            </a>
+
+                            <a href="#" class="menu-item">
+                                <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                                Privacy Policy
+                            </a>
+                        </div>
+
+                        <div class="menu-separator"></div>
+
+                        <div class="menu-section">
+                            <a href="#" class="menu-item">
+                                <svg class="menu-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                    <path d="M12 17h.01"></path>
+                                </svg>
+                                Need help?
+                            </a>
+                        </div>
+
+                        <button class="logout-btn" onclick="handleLogout()">
+                            Log Out
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content area để demo -->
+        <div style="background: #FFFFFF; padding: 40px; border-radius: 12px; text-align: center;">
+            <h2 style="color: #1F1F1F; margin-bottom: 16px;">Click vào tài khoản để xem dropdown menu</h2>
+            <p style="color: #666;">Menu sẽ hiện ra với hiệu ứng mượt mà và sử dụng bảng màu theo yêu cầu của bạn.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.getElementById('accountDropdown');
+            const trigger = document.querySelector('.account-trigger');
+
+            dropdown.classList.toggle('show');
+            trigger.classList.toggle('active');
+        }
+
+        function handleLogout() {
+            alert('Đăng xuất thành công!');
+            // Thêm logic đăng xuất thực tế ở đây
+        }
+
+        // Đóng dropdown khi click bên ngoài
+        document.addEventListener('click', function (event) {
+            const accountSection = document.querySelector('.account-section');
+            const dropdown = document.getElementById('accountDropdown');
+            const trigger = document.querySelector('.account-trigger');
+
+            if (!accountSection.contains(event.target)) {
+                dropdown.classList.remove('show');
+                trigger.classList.remove('active');
+            }
+        });
+
+        // Đóng dropdown khi nhấn ESC
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                const dropdown = document.getElementById('accountDropdown');
+                const trigger = document.querySelector('.account-trigger');
+                dropdown.classList.remove('show');
+                trigger.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+
+</html>
