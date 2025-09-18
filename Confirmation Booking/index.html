@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoàn tất thanh toán - Edumentor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F7F7F7;
+            color: #1F1F1F;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background-color: #FFFFFF;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0 2rem;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #FDCB6E;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #1F1F1F;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #FDCB6E;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-bell {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #1F1F1F;
+            cursor: pointer;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background-color: #FDCB6E;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-details span {
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        .user-name {
+            font-weight: bold;
+        }
+
+        .user-email {
+            color: #666;
+            font-size: 0.8rem !important;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .back-button:hover {
+            color: #FDCB6E;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+            gap: 2rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .step.completed .step-number {
+            background-color: #FDCB6E;
+            color: white;
+        }
+
+        .step.active .step-number {
+            background-color: #FDCB6E;
+            color: white;
+        }
+
+        .step.inactive .step-number {
+            background-color: #E5E5E5;
+            color: #999;
+        }
+
+        .step.inactive .step-text {
+            color: #999;
+        }
+
+        /* Main Content Grid */
+        .checkout-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+        }
+
+        /* Confirmation Section */
+        .confirmation-section {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        /* Payment Method Display */
+        .payment-method-display {
+            margin-bottom: 2rem;
+        }
+
+        .payment-method-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .card-display {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #F9F9F9;
+            border-radius: 8px;
+            border: 2px solid #F0F0F0;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 25px;
+            background: #1976D2;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .card-number {
+            font-family: monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Billing Address */
+        .billing-address {
+            margin-bottom: 2rem;
+        }
+
+        .address-display {
+            background: #F9F9F9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 2px solid #F0F0F0;
+        }
+
+        .address-line {
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #E8F5E8;
+            border: 2px solid #C8E6C9;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .success-icon {
+            width: 24px;
+            height: 24px;
+            background: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .success-content {
+            flex: 1;
+        }
+
+        .success-title {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+            color: #2E7D2E;
+        }
+
+        .success-subtitle {
+            font-size: 0.9rem;
+            color: #4A7C4A;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+
+        .summary-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .summary-label {
+            color: #666;
+        }
+
+        .summary-value {
+            font-weight: 600;
+        }
+
+        .subject-tag {
+            background: #FDCB6E;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .discount-section {
+            margin: 1.5rem 0;
+            padding: 1rem 0;
+            border-top: 1px solid #F0F0F0;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .discount-input {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .discount-code {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid #F0F0F0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .apply-btn {
+            background: #F0F0F0;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .apply-btn:hover {
+            background: #E0E0E0;
+        }
+
+        .total-section {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 2px solid #F0F0F0;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .total-amount {
+            color: #FDCB6E;
+            font-size: 1.3rem;
+        }
+
+        .security-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Complete Payment Button */
+        .complete-payment-btn {
+            width: 100%;
+            background: #FDCB6E;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .complete-payment-btn:hover {
+            background: #E6B15C;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .checkout-content {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .progress-steps {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">Edumentors</div>
+            <ul class="nav-links">
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Find a tutor</a></li>
+                <li><a href="#">My Bookings</a></li>
+                <li><a href="#">Messages</a></li>
+            </ul>
+            <div class="user-profile">
+                <button class="notification-bell">🔔</button>
+                <div class="user-info">
+                    <div class="user-avatar">N</div>
+                    <div class="user-details">
+                        <span class="user-name">Welcome, Nguyễn</span>
+                        <span class="user-email">lenguyentime16@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <a href="#" class="back-button">
+            ← Quay lại thanh toán
+        </a>
+
+        <div class="page-header">
+            <h1 class="page-title">Hoàn tất thanh toán</h1>
+            <p class="page-subtitle">Xử lý thanh toán an toàn cho buổi học của bạn</p>
+        </div>
+
+        <div class="progress-steps">
+            <div class="step completed">
+                <div class="step-number">1</div>
+                <div class="step-text">Xem lại</div>
+            </div>
+            <div class="step completed">
+                <div class="step-number">2</div>
+                <div class="step-text">Phương thức thanh toán</div>
+            </div>
+            <div class="step active">
+                <div class="step-number">3</div>
+                <div class="step-text">Xác nhận</div>
+            </div>
+        </div>
+
+        <div class="checkout-content">
+            <div class="confirmation-section">
+                <h2 class="section-title">Xác nhận thanh toán</h2>
+                <p class="section-subtitle">Xem lại chi tiết thanh toán trước khi hoàn tất</p>
+
+                <div class="payment-method-display">
+                    <h3 class="payment-method-title">Phương thức thanh toán</h3>
+                    <div class="card-display">
+                        <div class="card-icon">Visa</div>
+                        <div class="card-number">•••• •••• •••• 3456</div>
+                    </div>
+                </div>
+
+                <div class="billing-address">
+                    <h3 class="payment-method-title">Địa chỉ thanh toán</h3>
+                    <div class="address-display">
+                        <div class="address-line"><strong>Nguyễn Văn A</strong></div>
+                        <div class="address-line">123 Đường Nguyễn Huệ</div>
+                        <div class="address-line">Quận 1, TP. Hồ Chí Minh</div>
+                        <div class="address-line">Việt Nam</div>
+                    </div>
+                </div>
+
+                <div class="success-message">
+                    <div class="success-icon">✓</div>
+                    <div class="success-content">
+                        <div class="success-title">Thanh toán an toàn</div>
+                        <div class="success-subtitle">Thông tin thanh toán của bạn được mã hóa và bảo mật</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-summary">
+                <h3 class="summary-title">Tóm tắt đơn hàng</h3>
+
+                <div class="summary-item">
+                    <span class="summary-label">Buổi học:</span>
+                    <span class="summary-value">
+                        <span class="subject-tag">Toán - Giải tích</span>
+                    </span>
+                </div>
+
+                <div class="summary-item">
+                    <span class="summary-label">Thời lượng:</span>
+                    <span class="summary-value">1 giờ</span>
+                </div>
+
+                <div class="summary-item">
+                    <span class="summary-label">Giá:</span>
+                    <span class="summary-value">1.080.000 VNĐ/giờ</span>
+                </div>
+
+                <div class="discount-section">
+                    <div class="discount-input">
+                        <input type="text" class="discount-code" placeholder="Nhập mã giảm giá">
+                        <button class="apply-btn">Áp dụng</button>
+                    </div>
+                </div>
+
+                <div class="summary-item">
+                    <span class="summary-label">Tạm tính:</span>
+                    <span class="summary-value">1.080.000 VNĐ</span>
+                </div>
+
+                <div class="total-section">
+                    <div class="total-row">
+                        <span>Tổng cộng:</span>
+                        <span class="total-amount">1.080.000 VNĐ</span>
+                    </div>
+                </div>
+
+                <div class="security-info">
+                    <span>🔒</span>
+                    <span>Thanh toán được bảo mật SSL</span>
+                </div>
+
+                <div class="security-info">
+                    <span>🔒</span>
+                    <span>Mã hóa 256-bit</span>
+                </div>
+
+                <button class="complete-payment-btn" id="completePaymentBtn">
+                    🔒 Hoàn tất thanh toán - 1.080.000 VNĐ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Discount code application
+            const applyBtn = document.querySelector('.apply-btn');
+            if (applyBtn) {
+                applyBtn.addEventListener('click', function () {
+                    const discountCode = document.querySelector('.discount-code').value;
+                    if (discountCode) {
+                        alert('Mã giảm giá "' + discountCode + '" đã được áp dụng!');
+                        // In real implementation, you would validate and apply the discount
+                    }
+                });
+            }
+
+            // Complete payment button
+            const completePaymentBtn = document.getElementById('completePaymentBtn');
+            if (completePaymentBtn) {
+                completePaymentBtn.addEventListener('click', function () {
+                    // Show processing state
+                    this.innerHTML = '⏳ Đang xử lý thanh toán...';
+                    this.disabled = true;
+                    this.style.background = '#ccc';
+                    this.style.cursor = 'not-allowed';
+
+                    // Simulate payment processing
+                    setTimeout(() => {
+                        // Show success
+                        this.innerHTML = '✅ Thanh toán thành công!';
+                        this.style.background = '#4CAF50';
+
+                        // Redirect after success message
+                        setTimeout(() => {
+                            alert('Thanh toán thành công! Bạn sẽ được chuyển đến trang xác nhận.');
+                            // In real implementation, redirect to success page
+                            // window.location.href = '/booking-success';
+                        }, 1500);
+
+                    }, 3000);
+                });
+            }
+
+            // Add loading animation to payment processing
+            function showLoadingAnimation() {
+                const btn = document.getElementById('completePaymentBtn');
+                let dots = '';
+                const loadingInterval = setInterval(() => {
+                    dots = dots.length >= 3 ? '' : dots + '.';
+                    if (btn.disabled && btn.innerHTML.includes('Đang xử lý')) {
+                        btn.innerHTML = `⏳ Đang xử lý thanh toán${dots}`;
+                    } else {
+                        clearInterval(loadingInterval);
+                    }
+                }, 500);
+            }
+
+            // Start loading animation when button is clicked
+            document.getElementById('completePaymentBtn').addEventListener('click', showLoadingAnimation);
+        });
+    </script>
+</body>
+
+</html>
